@@ -20,37 +20,35 @@ https://www.kaggle.com/datasets/wasiqaliyasir/breast-cancer-dataset/code
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# 1 & 2: Load the CSV file
 try:
     file_path = 'Breast_cancer_dataset.csv'
     data = pd.read_csv(file_path)
 
-    # 3: Create a figure and axes for the plot
-    fig, ax = plt.subplots(figsize=(10, 7))
+    # 3: Create a synthetic date range for the length of the data
+    # We'll pretend each patient was recorded on a subsequent day starting from Jan 1, 2023.
+    # The number of periods will match the number of rows in the data.
+    date_range = pd.date_range(start='2023-01-01', periods=len(data), freq='D')
 
-    # 4: Separate data based on diagnosis
-    malignant = data[data['diagnosis'] == 'M']
-    benign = data[data['diagnosis'] == 'B']
+    # 4: Set the new date range as the index of the DataFrame
+    data.set_index(date_range, inplace=True)
 
-    # 5: Plot data for malignant cases
-    ax.scatter(malignant['radius_mean'], malignant['texture_mean'], 
-               color='red', label='Malignant', alpha=0.6)
+    # 5: Plot the time series of 'radius_mean'
+    plt.figure(figsize=(12, 6))
+    plt.plot(data.index, data['radius_mean'], label='Mean Radius Over Time (Simulated)', color='purple')
 
-    # 6: Plot data for benign cases
-    ax.scatter(benign['radius_mean'], benign['texture_mean'], 
-               color='blue', label='Benign', alpha=0.6)
+    # 6: Customize the plot
+    plt.title('Simulated Time Series of Tumor Mean Radius', fontsize=16)
+    plt.xlabel('Simulated Date', fontsize=12)
+    plt.ylabel('Mean Radius', fontsize=12)
+    
+    # 7: Add a grid and legend
+    plt.grid(True)
+    plt.legend()
+    
+    plt.tight_layout()
 
-    # 7: Customize the plot with title and labels
-    ax.set_title('Tumor Radius vs. Texture by Diagnosis', fontsize=16)
-    ax.set_xlabel('Mean Radius of Tumor', fontsize=12)
-    ax.set_ylabel('Mean Texture of Tumor', fontsize=12)
-
-    # 8: Add a legend
-    ax.legend()
-
-    # 9: Add a grid
-    ax.grid(True)
-
-    # 10: Display the plot
+    # 8: Display the plot
     plt.show()
 
 except FileNotFoundError:
@@ -65,7 +63,7 @@ except KeyError as e:
 
 # OUTPUT:
 
-<img width="845" height="630" alt="image" src="https://github.com/user-attachments/assets/29da2120-a242-428f-805a-acf7be68f4b9" />
+<img width="1189" height="590" alt="image" src="https://github.com/user-attachments/assets/6fa1e4a5-c0b7-424b-bd57-c4ce894791c7" />
 
 
 
